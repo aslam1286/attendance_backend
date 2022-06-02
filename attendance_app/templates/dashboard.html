@@ -1,0 +1,190 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Dash{% endblock %}
+
+{% block content_title %}DashB{% endblock %}
+
+{% block extra_head %}
+<style>
+#clock {
+    font-size: 38px;
+    /* width: 900px; */
+    /* height: 200px; */
+    /* margin: 2px; */
+    text-align: center;
+    /* border: 2px solid black;
+    border-radius: 5px; */
+    }
+</style>
+
+<link href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
+<!-- <link href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css"> -->
+
+
+{% endblock %}
+
+{% block content %}
+{% csrf_token %}
+<div class="d-flex flex-column flex-root">
+    <div
+        class="d-flex flex-column flex-column-fluid bgi-position-y-bottom position-x-center bgi-no-repeat bgi-size-contain bgi-attachment-fixed">
+        <div class="d-flex flex-center flex-column flex-column-fluid p-10 pb-lg-20">
+
+            <div class="w-lg-500px bg-body p-lg-15 mx-auto">
+                <div class="card mt-5" style="width: 1200px;">
+                    <div class="card-header" style="background-color: #e3f2fd;">
+                        <div class="row">
+                            <div class="col-md-10">
+                                <h3>Hello {{user.first_name}}</h3>
+                            </div>
+                            <div class="col-md-2">
+                                {% csrf_token %}
+
+                                <button id="present" data-id="{{user.id}}" class="btn btn-primary btnPresent">Present</button>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body text-center" style="background-color: rgba(30, 6, 37, 0.2)">
+                        <div id="clock"></div>
+                        <div class="container mt-3">
+                            <table class="table table-primary align-middle mt-3 fs-6 gy-5" id="attendance_table">
+                                <thead>
+                                    <tr class="text-start table-info text-muted fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="text-center">Sr. No</th>
+                                        <th class="text-center">Date</th>
+                                        <th class="text-center">From Time</th>
+                                        <th class="text-center">To Time</th>
+                                        <th class="text-center">Total Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-gray-600 fw-bold">
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
+
+<!-- <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script> -->
+<script type="text/javascript">
+    "use strict";
+
+    $(document).ready(function () {
+        
+        $("#attendance_table").DataTable({
+            order: [[0, 'desc']],
+            searching: true, paging: true, info: false,
+            // dom: 'Bfrtip',
+            // buttons: [
+            //     'copy', 'csv', 'excel', 'pdf', 'print'
+            // ],
+            "aoColumnDefs": [
+                { "bSortable": false, "aTargets": [1, 2, 3, 4] },
+            ],
+            columns: [
+                { data: "id" },
+                { data: "get_today_date" },
+                { data: "from_time" },
+                { data: "to_time" },
+                { data: "total_time" },
+            ],
+            sAjaxSource: '{% url "attendance_app:attendance_list" %}',
+        });
+
+        $("div#attendance_table_filter label").css({
+            float: "right",
+        });
+
+        $("div.dataTables_length label").css({
+            float: "left",
+        });
+
+        
+        
+
+        // $(".dataTables_filter").css({
+        //     marginBottom: '1%'
+        // });
+
+        // $(".dt-buttons").css({
+        //     backgroundColor: "red",
+        // });
+
+        $("#present").click(function (e) {
+            var user_id = $(this).attr("data-id");
+            $.ajax({
+                type: "POST",
+                data: {
+                    id: user_id,
+                    csrfmiddlewaretoken: $('[name="csrfmiddlewaretoken"]').val()
+                },
+                url: "{% url 'attendance_app:attend_in' %}",
+                success: function (response) {
+                    if (response["retcode"] === 1){
+                        $('#attendance_table').DataTable().ajax.reload();
+                        $("#present").text("Present");
+                    } else {
+                        $('#attendance_table').DataTable().ajax.reload();
+                        $("#present").text("Leave");
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                  alert("Error! Retry, or contact support.");
+                },
+            });
+        })
+
+        setInterval(showTime, 1000);
+        function showTime() {
+            let time = new Date();
+            let hour = time.getHours();
+            let min = time.getMinutes();
+            let sec = time.getSeconds();
+            let am_pm = "AM";
+
+            if (hour > 12) {
+                hour -= 12;
+                am_pm = "PM";
+            }
+            if (hour == 0) {
+                hr = 12;
+                am_pm = "AM";
+            }
+
+            hour = hour < 10 ? "0" + hour : hour;
+            min = min < 10 ? "0" + min : min;
+            sec = sec < 10 ? "0" + sec : sec;
+
+            let currentTime = hour + ":"
+                + min + ":" + sec + am_pm;
+
+            document.getElementById("clock")
+                .innerHTML = currentTime;
+        }
+        showTime();
+    });
+
+</script>
+{% endblock %}
