@@ -110,8 +110,8 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
-
         $("#months").change(function (event) {
+            $("#month_reports").DataTable().destroy();
             var monthsVal = $(this).val();
             var user_id = $(this).attr('my-id');
             $(".dt-buttons").empty();
@@ -138,25 +138,24 @@
                         alert("empty")
                     }
                     else{
-                        $("div#downloadRepo").append('<button type="button" class="btn btn-primary btn-sm">Ok</button>')
+                        $("div#downloadRepo").append('<button type="button" class="btn btn-primary btn-sm" onclick="downloadReports(this)">Ok</button>')
                     }                    
                 },
             });
         });
-
-        $("#downloadRepo.text").click(function(){
-            $(this).text("Please select correct file format.")
-            $("#month_reports").DataTable({
-                searching: false, paging: false, info: false,
-                dom: 'Bfrtip',
-                buttons: [
-                    'csv', 'excel', 'pdf', 'print'
-                ],
-                "bDestroy": true
-            });
-            $(".dt-button").addClass("btn btn-primary btn-sm")
-        })
     });
+    function downloadReports(e){
+        $("#downloadRepo.text").text("");
+        $("#month_reports").DataTable({
+            searching: false, paging: false, info: false,
+            dom: 'Bfrtip',
+            buttons: [
+                'csv', 'excel', 'pdf', 'print'
+            ],
+            "bDestroy": true
+        });
+        $(".dt-button").addClass("btn btn-primary btn-sm")
+        }
 
 </script>
 {% endblock %}
