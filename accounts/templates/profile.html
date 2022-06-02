@@ -74,14 +74,14 @@
                             </div>
                             <table id="month_reports" class="table table-light align-middle mt-3 fs-6 gy-5">
                                 <thead>
-                                    <tr class="table-warning">
+                                    <tr class="table-info">
                                         <th class="text-center">Date</th>
                                         <th class="text-center">From Time</th>
                                         <th class="text-center">To Time</th>
                                         <th class="text-center">Total Time</th>
                                     </tr>
                                 </thead>
-                                <tbody class="text-gray-600 fw-bold text-center"></tbody>
+                                <tbody class="text-gray-600 fw-bold text-center" id="t-body"></tbody>
                             </table>
                         </div>
                         <div id="downloadRepo" class="text text-center"></div>
@@ -114,6 +114,7 @@
         $("#months").change(function (event) {
             var monthsVal = $(this).val();
             var user_id = $(this).attr('my-id');
+            $(".dt-buttons").empty();
 
             $.ajax({
                 type: "POST",
@@ -128,13 +129,17 @@
                     $("div#downloadRepo").empty();
                     $('#month_reports tbody').empty();
                     
-                    
                     $.each(repo, function (i) {
                         $('#month_reports tbody').append('<tr><td>' + repo[i].today_date + '</td><td>' + repo[i].from_time + '</td><td>' + repo[i].to_time + '</td><td>' + repo[i].total_time + '</td></tr>');
                         
                     });
-                    $("div#downloadRepo").append('<button>Ok</button>')
-                    
+                    $(".dt-buttons").empty();
+                    if($("tbody").children().length === 0){
+                        alert("empty")
+                    }
+                    else{
+                        $("div#downloadRepo").append('<button type="button" class="btn btn-primary btn-sm">Ok</button>')
+                    }                    
                 },
             });
         });
@@ -147,7 +152,9 @@
                 buttons: [
                     'csv', 'excel', 'pdf', 'print'
                 ],
+                "bDestroy": true
             });
+            $(".dt-button").addClass("btn btn-primary btn-sm")
         })
     });
 

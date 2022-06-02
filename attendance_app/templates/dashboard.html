@@ -38,7 +38,7 @@
                     <div class="card-header" style="background-color: #e3f2fd;">
                         <div class="row">
                             <div class="col-md-10">
-                                <h3>Hello {{user.first_name}}</h3>
+                                <h3>Hello {{user}}</h3>
                             </div>
                             <div class="col-md-2">
                                 {% csrf_token %}
@@ -48,10 +48,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-body text-center" style="background-color: rgba(30, 6, 37, 0.2)">
+                    <div class="card-body text-center" style="background-color: rgb(255, 255, 255)">
                         <div id="clock"></div>
                         <div class="container mt-3">
-                            <table class="table table-primary align-middle mt-3 fs-6 gy-5" id="attendance_table">
+                            <table class="table table-light align-middle mt-3 fs-6 gy-5" id="attendance_table">
                                 <thead>
                                     <tr class="text-start table-info text-muted fw-bolder fs-7 text-uppercase gs-0">
                                         <th class="text-center">Sr. No</th>
@@ -120,6 +120,8 @@
         $("div.dataTables_length label").css({
             float: "left",
         });
+        $("#attendance_table_length select").removeClass("form-select");
+        $("#attendance_table_filter input").removeClass("form-control").addClass("ms-1");
 
         
         
