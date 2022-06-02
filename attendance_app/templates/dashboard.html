@@ -35,22 +35,17 @@
 
             <div class="w-lg-500px bg-body p-lg-15 mx-auto">
                 <div class="card mt-5" style="width: 1200px;">
-<<<<<<< HEAD
                     <!-- <div class="container mb-3">
                         <div class="row my-3">
                             <div class="col-md-10">
-=======
-                    
-                    <div class="card-body text-center" style="background-color: rgb(255, 255, 255)">
-                        <div class="row justify-content-between">
-                            <div class="col-2">
->>>>>>> 2faa42ac18afb2e0558977b43f5d390b630cec51
                                 <h3>Hello {{user}}</h3>
                             </div>
-                            <div class="col-2 ps-5">{% csrf_token %}
+                            <div class="col-md-2">
+                                {% csrf_token %}
+
                                 <button id="present" data-id="{{user.id}}" class="btn btn-primary btnPresent">Present</button>
+
                             </div>
-<<<<<<< HEAD
                         </div>
                     </div> -->
                     <div class="card-header" style="background-color: #e3f2fd;">
@@ -65,9 +60,6 @@
                         </div>
                     </div>
                     <div class="card-body text-center" style="background-color: rgb(255, 255, 255)">
-=======
-                          </div>
->>>>>>> 2faa42ac18afb2e0558977b43f5d390b630cec51
                         <div id="clock"></div>
                         <div class="container mt-3">
                             <table class="table table-light align-middle mt-3 fs-6 gy-5" id="attendance_table">
