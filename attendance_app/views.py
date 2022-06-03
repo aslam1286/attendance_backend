@@ -12,6 +12,7 @@ from django.db.models.functions import Concat, LPad, Extract, Cast
 
 @login_required(login_url='login')
 def dashboard(request):
+    user = request.user
     return render(request, 'dashboard.html', {"user": request.user})
 
 def attendance_in(request):

@@ -33,8 +33,11 @@
                         <div class="container">
                             <img src="{% static 'admin/img/logo.png' %}" height="50px" />
                             <div class="row mt-3 text-center">
-                                <h4 class="text text-center" style="color: #0a87a3;">{{user.first_name}} {{user.last_name}}</h4>
+                                <h4 class="text text-center" style="color: #0a87a3;">{{data.first_name}} {{data.last_name}}</h4>
                                 <span class="text text-center" style="color: #0a87a3;">Software Developer</span>
+                                <h5 class="text text-center" style="color: #0a87a3;">{{data.email}}</h5>
+                                <h5 class="text text-center" style="color: #0a87a3;">{{data.mobile_number}}</h5>
+                                <h5 class="text text-center" style="color: #0a87a3;">{{data.city}}</h5>
 
                             </div>
                         </div>
