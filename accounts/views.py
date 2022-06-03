@@ -48,7 +48,9 @@ def user_profile(request):
     data_dict = dict()
     data_dict['first_name'] = accounts_obj.user.first_name
     data_dict['last_name'] = accounts_obj.user.last_name
+    data_dict['dob'] = accounts_obj.dob
     data_dict['email'] = accounts_obj.user.email
+    data_dict['dest'] = accounts_obj.dest
     data_dict['mobile_number'] = accounts_obj.mobile_number
     data_dict['city'] = accounts_obj.city
     data_dict['pincode'] = accounts_obj.pincode
