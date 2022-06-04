@@ -52,6 +52,7 @@ def user_profile(request):
     total_days_in_month = Attendance.objects.filter(employee_id=user, today_date__month=getMonth[0]).count()
 
     data_dict = dict()
+    data_dict['id'] = accounts_obj.user.id
     data_dict['first_name'] = accounts_obj.user.first_name
     data_dict['last_name'] = accounts_obj.user.last_name
     data_dict['total_day'] = total_days_in_month

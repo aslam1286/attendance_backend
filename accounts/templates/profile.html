@@ -33,7 +33,8 @@
                 </div>
                 <div class="card-block">
                     <div class="user-image">
-                        <img src="https://bootdey.com/img/Content/avatar/avatar7.png" class="img-radius" alt="User-Profile-Image">
+                        <img src="https://bootdey.com/img/Content/avatar/avatar7.png" class="img-radius"
+                            alt="User-Profile-Image">
                     </div>
                     <h4 class="f-w-600 m-t-25">{{data.first_name}} {{data.last_name}}</h4>
                     <span class="text-muted">{{data.dest}}</span>
@@ -48,21 +49,28 @@
                             </div>
 
                             <div class="col-6">
-                                <i><button class="btn btn-sm btn-danger mt-3">Apply Leave</button></i>
+                                <i>
+                                    <button type="button" data-id="{{data.id}}"
+                                        class="btn btn-sm btn-danger mt-3 btnLeave" data-bs-toggle="modal"
+                                        data-bs-target="#applyLeaveButton">Apply Leave</button>
+                                </i>
                             </div>
                         </div>
                     </div>
                     <p class="m-t-15 text-muted">I am a Professional Python Django Rest API Developer.</p>
                     <hr>
                     <div class="row justify-content-center user-social-link">
-                        <div class="col-auto"><a href="https://www.linkedin.com" target="_blank"><i class="fa fa-linkedin text-linkedin"></i></a></div>
-                        <div class="col-auto"><a href="https://www.twitter.com" target="_blank"><i class="fa fa-twitter text-twitter"></i></a></div>
-                        <div class="col-auto"><a href="https://www.github.com" target="_blank"><i class="fa fa-github text-github"></i></a></div>
+                        <div class="col-auto"><a href="https://www.linkedin.com" target="_blank"><i
+                                    class="fa fa-linkedin text-linkedin"></i></a></div>
+                        <div class="col-auto"><a href="https://www.twitter.com" target="_blank"><i
+                                    class="fa fa-twitter text-twitter"></i></a></div>
+                        <div class="col-auto"><a href="https://www.github.com" target="_blank"><i
+                                    class="fa fa-github text-github"></i></a></div>
                     </div>
                 </div>
             </div>
         </div>
-        
+
         <div class="col-md-8">
             <div class="card user-card mt-5">
                 <div class="card-header mb-3 text-center" style="background-color: #e3f2fd;">
@@ -108,7 +116,36 @@
                 </div>
             </div>
         </div>
-	</div>
+    </div>
+</div>
+
+<div class="modal fade" id="applyLeaveButton" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="applyLeaveButton" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Apply Leave</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="leaveForm">
+                    <div class="mb-3">
+                        <label for="inputSubject" class="form-label">Subject</label>
+                        <input type="text" class="form-control" id="inputSubject" aria-describedby="inputSubject">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="inputMessage" class="form-label">Message</label>
+                        <input type="text" class="form-control" id="inputMessage" aria-describedby="inputMessage">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Apply</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 {% endblock %}
@@ -131,7 +168,7 @@
     $(document).ready(function () {
         $("#months").change(function (event) {
             $("#month_reports").DataTable().destroy();
-            
+
             var monthsVal = $(this).val();
             var user_id = $(this).attr('my-id');
             $(".dt-buttons").empty();
@@ -150,29 +187,42 @@
 
                     $("div#downloadRepo").empty();
                     $('#month_reports tbody').empty();
-                    
+
                     $.each(repo, function (i) {
                         $('#month_reports tbody').append('<tr><td>' + repo[i].today_date + '</td><td>' + repo[i].from_time + '</td><td>' + repo[i].to_time + '</td><td>' + repo[i].total_time + '</td></tr>');
-                        
+
                     });
                     $(".dt-buttons").empty();
-                    if($("tbody").children().length === 0){
+                    if ($("tbody").children().length === 0) {
                         Swal.fire('There is no any data available.');
                     }
-                    else{
+                    else {
                         $("div#downloadRepo").append('<button type="button" class="btn btn-primary" onclick="downloadReports(this)">Download</button>')
                     }
 
                     var selectedMonth = $('select#months option:selected').text()
 
-                    $(".tDays").text("Total Working Days in "+selectedMonth);
+                    $(".tDays").text("Total Working Days in " + selectedMonth);
                     $(".tDays").next().text(totalDays);
                 },
             });
         });
+
+        $("#applyLeaveButton").on("show.bs.modal", function (e) {
+            console.log("okkay");
+        });
+
+        $("#applyLeaveButton").on("hidden.bs.modal", function (e) {
+            $('#leaveForm')[0].reset();
+        });
+
+
+
     });
-    function downloadReports(e){
+
+    function downloadReports(e) {
         $("#downloadRepo.text").text("");
+
         $("#month_reports").DataTable({
             searching: false, paging: false, info: false,
             dom: 'Bfrtip',
@@ -181,14 +231,16 @@
             ],
             "bDestroy": true
         });
+
         $("#downloadRepo").append($(".dt-button"));
+
         $(".dt-button").css({
             marginLeft: "11px",
 
         });
-        $(".dt-button").addClass("btn btn-primary");
 
-        }
+        $(".dt-button").addClass("btn btn-primary");
+    }
 
 </script>
 {% endblock %}

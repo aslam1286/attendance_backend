@@ -155,10 +155,12 @@ class monthlyAttendanceListFilter(ListFilter):
                          output_field=CharField()), 4, Value('0'),
                     output_field=CharField()
                 ),
-                
             ),
         ).filter(employee_id = request.user.id)
 
         queryset = self.model.objects.annotate(get_today_date=Case(When(today_date__isnull=False,then=Subquery(attendance_expression.values('get_today_date')[:1])),default=Value('-'))).values(*self.fields)
         return queryset
     
+def apply_leave_for_today(request):
+    user_id = request.POST['id']
+    attendance_obj = Attendance.objects.filter(employee_id=user_id)
