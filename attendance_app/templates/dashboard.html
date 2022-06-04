@@ -86,7 +86,7 @@
         
         $("#attendance_table").DataTable({
             order: [[0, 'desc']],
-            searching: true, paging: true, info: false,
+            searching: true, paging: true, info: false,"scrollY":"200px","scrollCollapse":true,
             "aoColumnDefs": [
                 { "bSortable": false, "aTargets": [1, 2, 3, 4] },
             ],

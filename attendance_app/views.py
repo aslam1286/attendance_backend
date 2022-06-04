@@ -3,6 +3,7 @@ from django.http import HttpResponseBadRequest, JsonResponse, HttpResponse
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from attendance_app.models import Attendance
+from accounts.models import Leave
 from django.http import HttpResponse
 from .filter import ListFilter
 from django.contrib.auth.decorators import login_required
@@ -162,5 +163,16 @@ class monthlyAttendanceListFilter(ListFilter):
         return queryset
     
 def apply_leave_for_today(request):
-    user_id = request.POST['id']
-    attendance_obj = Attendance.objects.filter(employee_id=user_id)
+    if request.method == "POST":
+        subject = request.POST.get('subject')
+        message = request.POST.get('message')
+        user_id = request.POST.get('user_id')
+        leave = Leave(subject=subject,message=message,user_id=user_id,date=datetime.now())
+        leave.save()
+        a = str(leave.date)
+        b = a[0:10]
+        print(">>>>>",b)
+        return JsonResponse({'retcode': 1,'b':b})
+    else:
+        return render(request,'profile.html')
+    # attendance_obj = Attendance.objects.filter(employee_id=user_id)

@@ -13,3 +13,8 @@ class Profile(models.Model):
     def __str__(self):
         return self.mobile_number
     
+class Leave(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    subject = models.TextField(max_length=255)
+    message = models.TextField(max_length=255)
+    date = models.DateField(blank=True,null=True)

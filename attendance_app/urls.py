@@ -12,5 +12,5 @@ urlpatterns = [
     path('attend-in', views.attendance_in, name='attend_in'),
     path('attend-out', views.attendance_out, name='attend_out'),
     path('month-repo', views.get_months_reports, name='get_months_report'),
-    path('apply-leave-today', views.apply_leave_for_today, name='apply_leave_for_today'),
+    path('apply-leave-today/', views.apply_leave_for_today, name='apply_leave_for_today'),
 ]
