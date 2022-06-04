@@ -27,7 +27,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-4">
-            <div class="card user-card mt-3">
+            <div class="card user-card mt-5">
                 <div class="card-header mb-3 text-center" style="background-color: #e3f2fd;">
                     <h5 style="color: #0f79c5;">Profile</h5>
                 </div>
@@ -39,47 +39,36 @@
                     <span class="text-muted">{{data.dest}}</span>
                     <p class="text-muted mt-3">Active | Born {{data.dob}}</p>
                     <hr>
-                    <p class="text-muted m-t-15">Activity Level: 87%</p>
-                    <ul class="list-unstyled activity-leval">
-                        <li class="active"></li>
-                        <li class="active"></li>
-                        <li class="active"></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
                     <div class="bg-c-blue counter-block m-t-10 p-20">
                         <div class="row">
-                            <div class="col-4">
-                                <i class="fa fa-comment"></i>
-                                <p>1256</p>
+                            <div class="col-6">
+                                <!-- <i class="fa fa-suitcase aslam"></i> -->
+                                <i class="tDays">Total Working Days in {% now "F" %}</i>
+                                <p>{{data.total_day}}</p>
                             </div>
-                            <div class="col-4">
-                                <i class="fa fa-user"></i>
-                                <p>8562</p>
-                            </div>
-                            <div class="col-4">
-                                <i class="fa fa-suitcase"></i>
-                                <p>189</p>
+
+                            <div class="col-6">
+                                <i><button class="btn btn-sm btn-danger mt-3">Apply Leave</button></i>
                             </div>
                         </div>
                     </div>
                     <p class="m-t-15 text-muted">I am a Professional Python Django Rest API Developer.</p>
                     <hr>
                     <div class="row justify-content-center user-social-link">
-                        <div class="col-auto"><a href="#!"><i class="fa fa-linkedin text-linkedin"></i></a></div>
-                        <div class="col-auto"><a href="#!"><i class="fa fa-twitter text-twitter"></i></a></div>
-                        <div class="col-auto"><a href="#!"><i class="fa fa-github text-github"></i></a></div>
+                        <div class="col-auto"><a href="https://www.linkedin.com" target="_blank"><i class="fa fa-linkedin text-linkedin"></i></a></div>
+                        <div class="col-auto"><a href="https://www.twitter.com" target="_blank"><i class="fa fa-twitter text-twitter"></i></a></div>
+                        <div class="col-auto"><a href="https://www.github.com" target="_blank"><i class="fa fa-github text-github"></i></a></div>
                     </div>
                 </div>
             </div>
         </div>
         
         <div class="col-md-8">
-            <div class="card user-card mt-3">
+            <div class="card user-card mt-5">
                 <div class="card-header mb-3 text-center" style="background-color: #e3f2fd;">
                     <h5 style="color: #0f79c5;">Attendance Report</h5>
                 </div>
-                <div class="card-block" style="min-height: 555px;">
+                <div class="card-block" style="min-height: 550px;">
                     <div class="container">
                         <div class="row">
                             <div class="col-md-8">
@@ -142,6 +131,7 @@
     $(document).ready(function () {
         $("#months").change(function (event) {
             $("#month_reports").DataTable().destroy();
+            
             var monthsVal = $(this).val();
             var user_id = $(this).attr('my-id');
             $(".dt-buttons").empty();
@@ -156,6 +146,8 @@
                 url: "{% url 'attendance_app:get_months_report' %}",
                 success: function (response) {
                     var repo = response.month_reports;
+                    var totalDays = response.count;
+
                     $("div#downloadRepo").empty();
                     $('#month_reports tbody').empty();
                     
@@ -169,7 +161,12 @@
                     }
                     else{
                         $("div#downloadRepo").append('<button type="button" class="btn btn-primary" onclick="downloadReports(this)">Download</button>')
-                    }                    
+                    }
+
+                    var selectedMonth = $('select#months option:selected').text()
+
+                    $(".tDays").text("Total Working Days in "+selectedMonth);
+                    $(".tDays").next().text(totalDays);
                 },
             });
         });

@@ -115,9 +115,13 @@ class attendanceListFilter(ListFilter):
 def get_months_reports(request):
     id = request.POST['id']
     month = request.POST['mnt']
-
     attendance_obj = Attendance.objects.filter(employee_id = id, today_date__month=month).values()
-    return JsonResponse({"month_reports": list(attendance_obj)})
+    
+    count = 0
+    for attendance in attendance_obj:
+        count = count + 1
+
+    return JsonResponse({"month_reports": list(attendance_obj), "count": count})
 
 
 @method_decorator(login_required, name='dispatch')
@@ -157,5 +161,4 @@ class monthlyAttendanceListFilter(ListFilter):
 
         queryset = self.model.objects.annotate(get_today_date=Case(When(today_date__isnull=False,then=Subquery(attendance_expression.values('get_today_date')[:1])),default=Value('-'))).values(*self.fields)
         return queryset
-    
     

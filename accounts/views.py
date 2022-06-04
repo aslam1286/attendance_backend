@@ -1,5 +1,7 @@
+from datetime import date
 from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
+from attendance_app.models import Attendance
 from django.contrib import auth
 from django.views.decorators.csrf import csrf_exempt
 from accounts.models import Profile
@@ -45,9 +47,14 @@ def user_profile(request):
     user = request.user
     accounts_obj = Profile.objects.filter(user_id=user).first()
 
+    today = date.today()
+    getMonth= str(today.strftime("%m/%d/%y")).split("/")
+    total_days_in_month = Attendance.objects.filter(employee_id=user, today_date__month=getMonth[0]).count()
+
     data_dict = dict()
     data_dict['first_name'] = accounts_obj.user.first_name
     data_dict['last_name'] = accounts_obj.user.last_name
+    data_dict['total_day'] = total_days_in_month
     data_dict['dob'] = accounts_obj.dob
     data_dict['email'] = accounts_obj.user.email
     data_dict['dest'] = accounts_obj.dest
