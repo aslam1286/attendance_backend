@@ -5,5 +5,6 @@ app_name = 'organizations'
 
 urlpatterns = [
     path('', views.organization, name='organization'),
+    path('ownerlogin/',views.owner_login,name='owner-login')
 
 ]
