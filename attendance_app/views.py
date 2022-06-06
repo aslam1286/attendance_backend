@@ -158,9 +158,9 @@ class monthlyAttendanceListFilter(ListFilter):
                     output_field=CharField()
                 ),
             ),
-        ).filter(employee_id = request.user.id)
+        ).all()
 
-        queryset = self.model.objects.annotate(get_today_date=Case(When(today_date__isnull=False,then=Subquery(attendance_expression.values('get_today_date')[:1])),default=Value('-'))).values(*self.fields)
+        queryset = self.model.objects.annotate(get_today_date=Case(When(today_date__isnull=False,then=Subquery(attendance_expression.filter(employee_id = request.user.id).values('get_today_date')[:1])),default=Value('-'))).values(*self.fields)
         return queryset
     
 def apply_leave_for_today(request):
@@ -170,10 +170,9 @@ def apply_leave_for_today(request):
         user_id = request.POST.get('user_id')
         leave = Leave(subject=subject,message=message,user_id=user_id,date=datetime.now())
         leave.save()
-        a = str(leave.date)
-        b = a[0:10]
-        print(">>>>>",b)
-        return JsonResponse({'retcode': 1,'b':b})
+        leave_date_str = str(leave.date)
+        leave_date = leave_date_str[0:10]
+        return JsonResponse({'retcode': 1, 'b':leave_date})
     else:
         return render(request,'profile.html')
     # attendance_obj = Attendance.objects.filter(employee_id=user_id)

@@ -42,18 +42,10 @@
                     <hr>
                     <div class="bg-c-blue counter-block m-t-10 p-20">
                         <div class="row">
-                            <div class="col-6">
+                            <div class="text-center">
                                 <!-- <i class="fa fa-suitcase aslam"></i> -->
                                 <i class="tDays">Total Working Days in {% now "F" %}</i>
                                 <p>{{data.total_day}}</p>
-                            </div>
-
-                            <div class="col-6">
-                                <i>
-                                    <button type="button" data-id="{{data.id}}"
-                                        class="btn btn-sm btn-danger mt-3 btnLeave" data-bs-toggle="modal"
-                                        data-bs-target="#applyLeaveButton">Apply Leave</button>
-                                </i>
                             </div>
                         </div>
                     </div>
@@ -119,35 +111,6 @@
     </div>
 </div>
 
-<div class="modal fade" id="applyLeaveButton" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="applyLeaveButton" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Apply Leave</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="leaveForm" method="POST">
-                    <div class="mb-3">
-                        <label for="inputSubject" class="form-label">Subject</label>
-                        <input type="text" class="form-control" name="subject" id="inputSubject" aria-describedby="inputSubject">
-                        <input type="hidden" data-id="{{user.id}}" value="{{user.id}}" name="user_id" id="hinput">
-                    </div>{% csrf_token %}
-
-                    <div class="mb-3">
-                        <label for="inputMessage" class="form-label">Message</label>
-                        <input type="text" class="form-control" name="message" id="inputMessage" aria-describedby="inputMessage">
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary" id="submit_leave">Apply</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 {% endblock %}
 
@@ -194,7 +157,7 @@
 
                     });
                     $("#month_reports").DataTable({
-                    searching: false, paging: false, info: false,"scrollY":"200px","scrollCollapse":true,
+                    searching: false, paging: false, info: false,"scrollY":"400px","scrollCollapse":true,
                     dom: 'Bfrtip',
                     buttons: [
                         'csv', 'excel', 'pdf', 'print'
@@ -215,33 +178,6 @@
                     $(".tDays").next().text(totalDays);
                 },
             });
-        });
-
-        $("#applyLeaveButton").on("show.bs.modal", function (e) {
-            $("#submit_leave").click(function(){
-                var subject = $("#inputSubject").val();
-                var message = $("#inputMessage").val();
-                var user_id = $("#hinput").attr("data-id");
-                $.ajax({
-                    type: "POST",
-                    data: $("#leaveForm").serialize(),
-                    dataType: "json",
-                    url: "{% url 'attendance_app:apply_leave_for_today' %}",
-                    success: function(response){
-                        if (response['retcode'] == 1){
-                            console.log("done something!!!!!!!!")
-                            console.log(response)
-                        }else{
-                            console.log("error something went wrong!!")
-                        }
-                        $("#applyLeaveButton").modal("hide");
-                    }
-                });
-            });
-        });
-
-        $("#applyLeaveButton").on("hidden.bs.modal", function (e) {
-            $('#leaveForm')[0].reset();
         });
     });
 
