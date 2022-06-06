@@ -82,7 +82,7 @@
                             <div class="col-md-8">
                                 <span>Please select month to download report.</span>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-4 mb-3">
                                 <select id="months" my-id="{{user.id}}" class="form-control">
                                     <option value="" selected>Select Month...</option>
                                     <option value="1">January</option>
@@ -100,7 +100,7 @@
                                 </select>
                             </div>
                         </div>
-                        <table id="month_reports" class="table table-light align-middle mt-3 fs-6 gy-5">
+                        <table id="month_reports" class="table table-light align-middle mt-0 mb-0 fs-6 gy-5">
                             <thead>
                                 <tr class="table-info">
                                     <th class="text-center">Date</th>
@@ -170,9 +170,9 @@
         $("#months").change(function (event) {
             $("#month_reports").DataTable().destroy();
 
+            $(".dt-buttons").empty();
             var monthsVal = $(this).val();
             var user_id = $(this).attr('my-id');
-            $(".dt-buttons").empty();
 
             $.ajax({
                 type: "POST",
@@ -193,12 +193,20 @@
                         $('#month_reports tbody').append('<tr><td>' + repo[i].today_date + '</td><td>' + repo[i].from_time + '</td><td>' + repo[i].to_time + '</td><td>' + repo[i].total_time + '</td></tr>');
 
                     });
-                    $(".dt-buttons").empty();
+                    $("#month_reports").DataTable({
+                    searching: false, paging: false, info: false,"scrollY":"200px","scrollCollapse":true,
+                    dom: 'Bfrtip',
+                    buttons: [
+                        'csv', 'excel', 'pdf', 'print'
+                    ],
+                    "bDestroy": true
+                    });
+                    $(".dt-buttons").hide();
                     if ($("tbody").children().length === 0) {
                         Swal.fire('There is no any data available.');
                     }
                     else {
-                        $("div#downloadRepo").append('<button type="button" class="btn btn-primary" onclick="downloadReports(this)">Download</button>')
+                        $("div#downloadRepo").append('<button type="button" class="btn btn-primary mt-3" onclick="downloadReports(this)">Download</button>')
                     }
 
                     var selectedMonth = $('select#months option:selected').text()
@@ -235,29 +243,15 @@
         $("#applyLeaveButton").on("hidden.bs.modal", function (e) {
             $('#leaveForm')[0].reset();
         });
-        
-
-
-
     });
 
     function downloadReports(e) {
-        $("#downloadRepo.text").text("");
-
-        $("#month_reports").DataTable({
-            searching: false, paging: false, info: false,"scrollY":"200px","scrollCollapse":true,
-            dom: 'Bfrtip',
-            buttons: [
-                'csv', 'excel', 'pdf', 'print'
-            ],
-            "bDestroy": true
-        });
+        $("#downloadRepo.text").text("").addClass("mt-3");
 
         $("#downloadRepo").append($(".dt-button"));
 
         $(".dt-button").css({
             marginLeft: "11px",
-
         });
 
         $(".dt-button").addClass("btn btn-primary");

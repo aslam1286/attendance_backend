@@ -13,7 +13,7 @@
   </head>
   <body>
     <nav class="navbar navbar-expand-lg" style="background-color: #e3f2fd;">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="{% url 'attendance_app:dashboard' %}">
             <img src="{% static 'admin/img/logo.png' %}" height="50px" />
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,10 +25,10 @@
                 <li class="nav-item">
                     <a class="nav-link active text-primary btn btn-light " aria-current="page" href="{% url 'attendance_app:dashboard' %}">Home</a>
                 </li>
-                <!-- <li class="nav-item">
-                    <a class="nav-link active text-primary btn btn-light mx-2" href="{% url 'organizations:organization' %}">Organization</a>
-                </li> -->
-                <li class="nav-item dropdown mx-2">
+                <li class="nav-item mx-2">
+                  <a class="nav-link active text-primary btn btn-light" href="{% url 'accounts:user_profile' %}">Profile</a>
+                </li>
+                <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle btn btn-light" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     Organization
                   </a>
@@ -36,9 +36,6 @@
                     <li><a class="dropdown-item" href="{% url 'organizations:owner-login' %}">Owner Login</a></li>
                     <li><a class="dropdown-item" href="{% url 'organizations:organization' %}">Visit Company Site</a></li>
                   </ul>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active text-primary btn btn-light" href="{% url 'accounts:user_profile' %}">Profile</a>
                 </li>
             </ul>
         </div>
