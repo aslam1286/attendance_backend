@@ -82,6 +82,7 @@ class attendanceListFilter(ListFilter):
     default_sortable_by = 'id'
 
     def get_queryset(self, request):
+        user = request.user
 
         attendance_expression = self.model.objects.annotate(
             get_today_date=Concat(
@@ -108,7 +109,7 @@ class attendanceListFilter(ListFilter):
             ),
         ).all()
 
-        queryset = self.model.objects.annotate(get_today_date=Case(When(today_date__isnull=False,then=Subquery(attendance_expression.values('get_today_date')[:1])),default=Value('-'))).values(*self.fields)
+        queryset = self.model.objects.annotate(get_today_date=Case(When(today_date__isnull=False,then=Subquery(attendance_expression.values('get_today_date')[:1])),default=Value('-'))).filter(employee_id=user.id).values(*self.fields)
         return queryset
 
 
